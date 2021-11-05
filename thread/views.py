@@ -15,12 +15,12 @@ def index(request):
         search = request.POST["search"]
         thread_list = []
         for x in Thread.objects.all():
-            if x.search(search) and x.report < 10:
+            if x.search(search) and x.report < 20:
                 thread_list.append(x)
     # use when user didnt search Dormitory so it will return all dormitory
     else:
         for n in Thread.objects.all():
-            if n.report < 10:
+            if n.report < 20:
                 thread_list.append(n)
     return render(request, "thread/index.html", {"thread_list": thread_list[::-1]})
 
@@ -30,6 +30,24 @@ def thread(request,thread_id) :
     return render(request, "thread/thread.html", {
         "thread": this_thread,
     })
+
+def report_thread(request,thread_id) :
+    if not request.user.is_authenticated:
+        messages.warning(request, "Login First to proceed")
+        return HttpResponseRedirect(reverse("dormitory:index"))
+
+    this_thread = get_object_or_404(Thread, id=thread_id)
+    this_thread.report += 1
+    this_thread.save()
+
+def report_sub_thread (request,sub_thread_id):
+    if not request.user.is_authenticated:
+        messages.warning(request, "Login First to proceed")
+        return HttpResponseRedirect(reverse("dormitory:index"))
+        
+    this_sub_thread = get_object_or_404(Sub_thread, id=sub_thread_id)
+    this_sub_thread.report += 1
+    this_sub_thread.save()
 
 def my_thread(request):
     if not request.user.is_authenticated:

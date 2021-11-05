@@ -141,3 +141,12 @@ def review_dormitory(request, dormitory_id):
         content = MarkdownForm()
 
     return render(request, 'dormitory/dormitory.html', {"dormitory": this_dorm,'form': content})
+
+def report_review(request,review_id):
+    if not request.user.is_authenticated:
+        messages.warning(request, "Login First to proceed")
+        return HttpResponseRedirect(reverse("dormitory:index"))
+        
+    this_review = get_object_or_404(Review, id=review_id)
+    this_review.report += 1
+    this_review.save()
