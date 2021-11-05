@@ -27,9 +27,24 @@ def index(request):
 def thread(request,thread_id) :
     this_thread = get_object_or_404(Thread, id=thread_id)
 
-    return render(request, "thread/thread.html", {
-        "thread": this_thread,
-    })
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.warning(request, "Login First to proceed")
+            return HttpResponseRedirect(reverse("dormitory:index"))
+        content = MarkdownForm(request.POST)
+        
+        if content.is_valid():
+            content = content.cleaned_data['Content']
+            new_subthread = Sub_thread(replyto= Thread.objects.filter(id=thread_id),content=content,author=request.user,date=datetime.datetime.now(datetime.timezone.utc))
+            new_subthread.save()
+            #Reset form
+            content = MarkdownForm()
+            return render(request, 'thread/thread.html', {"thread": this_thread,'form': content})
+    else:
+        content = MarkdownForm()
+
+    return render(request, 'thread/thread.html', {"thread": this_thread,'form': content})
+    
 
 def report_thread(request,thread_id) :
     if not request.user.is_authenticated:
@@ -39,6 +54,7 @@ def report_thread(request,thread_id) :
     this_thread = get_object_or_404(Thread, id=thread_id)
     this_thread.report += 1
     this_thread.save()
+    return HttpResponseRedirect(reverse("thread:thread",args = (thread_id,)))
 
 def report_sub_thread (request,sub_thread_id):
     if not request.user.is_authenticated:
@@ -48,6 +64,7 @@ def report_sub_thread (request,sub_thread_id):
     this_sub_thread = get_object_or_404(Sub_thread, id=sub_thread_id)
     this_sub_thread.report += 1
     this_sub_thread.save()
+    return HttpResponseRedirect(reverse("thread:thread",args = (thread_id,)))
 
 def my_thread(request):
     if not request.user.is_authenticated:
@@ -84,24 +101,4 @@ def create_thread(request):
         content = MarkdownForm()
     return render(request, 'thread/create_thread.html', {'form': content})
 
-def reply_thread(request,thread_id) :
-    """Create Sub_thread to reply thread"""
-    if not request.user.is_authenticated:
-        messages.warning(request, "Login First to proceed")
-        return render(request, "dormitory/index.html")
-    this_thread = get_object_or_404(Thread, id=thread_id)
 
-    if request.method == "POST":
-        
-        content = MarkdownForm(request.POST)
-        
-        if content.is_valid():
-            content = content.cleaned_data['Content']
-            new_subthread = Sub_thread(replyto= Thread.objects.filter(id=thread_id),content=content,author=request.user,date=datetime.datetime.now(datetime.timezone.utc))
-            new_subthread.save()
-            #Reset form
-            content = MarkdownForm()
-            return render(request, 'thread/thread.html', {"thread": this_thread,'form': content})
-    else:
-        content = MarkdownForm()
-    return render(request, 'thread/thread.html', {"thread": this_thread,'form': content})

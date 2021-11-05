@@ -44,11 +44,28 @@ def dormitories(request):
 
 
 def dormitory(request, dorm_title):
-    this_dorm = get_object_or_404(Dormitory, title=dorm_title)
 
-    return render(request, "dormitory/dormitory.html", {
-        "dormitory": this_dorm,
-    })
+    this_dorm = get_object_or_404(Dormitory, id=dormitory_id)
+
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.warning(request, "Login First to proceed")
+            return render(request, "dormitory/index.html")
+        stars = request.POST["stars"]
+        content = MarkdownForm(request.POST)
+        
+        if content.is_valid():
+            content = content.cleaned_data['Content']
+            new_review = Sub_thread(reviewto= Dormitory.objects.filter(id=dormitory_id),stars=stars,content=content,author=request.user,date=datetime.datetime.now(datetime.timezone.utc))
+            new_review.save()
+            #Reset form
+            content = MarkdownForm()
+            return render(request, 'dormitory/dormitory.html', {"dormitory": this_dorm,'form': content})
+    else:
+        content = MarkdownForm()
+
+    return render(request, 'dormitory/dormitory.html', {"dormitory": this_dorm,'form': content})
+
 
 
 def create_dormitory(request):
@@ -142,11 +159,12 @@ def review_dormitory(request, dormitory_id):
 
     return render(request, 'dormitory/dormitory.html', {"dormitory": this_dorm,'form': content})
 
-def report_review(request,review_id):
+def report_review(request,dormitory_id,review_id):
     if not request.user.is_authenticated:
         messages.warning(request, "Login First to proceed")
         return HttpResponseRedirect(reverse("dormitory:index"))
-        
+    this_dorm = get_object_or_404(Dormitory, id=dormitory_id)
     this_review = get_object_or_404(Review, id=review_id)
     this_review.report += 1
     this_review.save()
+    return HttpResponseRedirect(reverse("dormitory:dormitory",args = (this_dorm.title,)))
