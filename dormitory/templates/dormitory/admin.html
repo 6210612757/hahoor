@@ -1,5 +1,5 @@
 {% extends "dormitory/layout.html" %} 
-
+{% load static %}
 {% block body %}
 <title>Admin</title>
 <style>
@@ -43,16 +43,40 @@
         background-color: #E0E0E0;
         margin-top: 10px;
     }
+    div.figure {
+        float: 20%;
+        width: 30%;
+        border: thin silver solid;
+        margin: 1em;
+        padding: 0.5em;
+    }
+
+    div.figure p {
+        text-align: center;
+        font-style: italic;
+        font-size: smaller;
+        text-indent: 0;
+        display: inline;
+    }
+    img.scaled {
+        width: 100%;
+        height: 100px;
+    }
 </style>
 <div style="margin-left: 10%; margin-right: 10%;">
-<h2 class="p3"><b>Dormitories<b></h2>
-<br>
+    <h2 class="p3"><b>Dormitories<b></h2>
+    <br>
     <div class="container">
         {% for dorm in dormitories %}
             <div class="row">
                 {% if not dorm.status%}
                 <div class="col-7">
                     <a href = "{% url 'dormitory:dormitory' dorm.title %}" style="text-decoration: none;"><b class="p4">{{dorm}}</b></a>
+                    <br>
+                    <div class="figure">
+                        <img class="scaled" src="{{ dorm.icon }}" >
+                    </div>
+                    {{ dorm_icon.icon }}
                 </div>
                 <div class="col">
                     <b class="p2">STATUS: </b> <b class="p2" style="color: tomato;">Not Showing</b>
@@ -66,6 +90,10 @@
                 {% else %}
                 <div class="col-7">
                     <a href = "{% url 'dormitory:dormitory' dorm.title %}" style="text-decoration: none;"><b class="p4">{{dorm}}</b></a>
+                    <br>
+                    <div class="figure">
+                        <img class="scaled" src="{{ dorm.icon }}" >
+                    </div>
                 </div>
                 <div class="col">
                     <b class="p2">STATUS: </b><b class="p2" style="color: #5cb484;">Showing</b>
@@ -82,6 +110,16 @@
         {% endfor %}
     </div>
     <h2 class="p3"><b>Threads</b></h2>
+    <br>
+    <div class="container">
+        {% for thread in thread_list %}
+        <div class="row">
+            <div class="col-7">
+                {{thread.header}}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
     <h2 class="p3"><b>Sub Threads</b></h2>
     <h2 class="p3"><b>Reviews</b></h2>
 </div>
