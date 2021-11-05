@@ -26,10 +26,45 @@
         margin-right: auto;
         width: 100%;
     }
+    .h3:before,
+    .h3:after {
+        background-color: rgb(211, 211, 211);
+        content: "";
+        display: inline-block;
+        height: 1px;
+        position: relative;
+        vertical-align: middle;
+        width: 43.5%;
+    }
+    .h3:before {
+        right: 0.5em;
+        margin-left: 1%;
+    }
+    .h3:after {
+        left: 0.5em;
+        margin-right: -50%;
+    }
     h1,h2,h3,h4,h5,h6 {
         font-family: 'Noto Sans Thai', sans-serif;
     }
-    
+    .button5 {
+        background-color: white;
+        color: black;
+        border: 2px solid white;
+        padding: 2px 2px;
+    }
+
+    .button5:hover {
+        background-color: #e2e2e2;
+        color: rgb(0, 0, 0);
+        border: 2px solid #e2e2e2;
+    }
+    .line {
+        height: 1px;
+        width: 100%;
+        background-color: #E0E0E0;
+        margin-top: 10px;
+    }
 </style>
 
 <div style="margin-left: 25%; margin-right: 25%; margin-bottom: 7em; margin-top: 4em;">
@@ -39,7 +74,53 @@
             <br>
             <br>
             <b class="p4">{{dormitory.content | convert_markdown | safe }}</b>
-</div>
+    <br>
 
+    <div style="float: right;">
+        <a href="#review"><button class="button button5"><b class="p3">&#128073; เขียนรีวิว</b></button></a>
+    </div>
+    
+    <br>
+    <br>
+
+    {% for reviews in dormitory.reviews.all %}
+        <h3 class="p3 h3" style="margin-left: em;">&#128172;<b> การรีวิว</b></h3>
+        <img class="avatar" src="/static/images/avatar.png" style="float:left; margin-right: 1em; margin-top: 0.5em; width: 3em; height: 3em;">
+        <b class="p3" style="margin-left: 0.5em;">{{reviews.author}} </b>
+        <br>
+        {% if reviews.stars == 1 %}
+            <span style="font-size: 1.5em;"> &#127773;&#127770;&#127770;&#127770;&#127770;</span>
+        {% elif reviews.stars == 2 %}
+            <span style="font-size: 1.5em;"> &#127773;&#127773;&#127770;&#127770;&#127770;</span>
+        {% elif reviews.stars == 3 %}
+            <span style="font-size: 1.5em;"> &#127773;&#127773;&#127773;&#127770;&#127770;</span>
+        {% elif reviews.stars == 4 %}
+            <span style="font-size: 1.5em;"> &#127773;&#127773;&#127773;&#127773;&#127770;</span>
+        {% elif reviews.stars == 5 %}
+            <span style="font-size: 1.5em;"> &#127773;&#127773;&#127773;&#127773;&#127773;</span>
+        {% endif %}
+        <br>
+        
+        <br>
+        <b class="p3" style="float: right; margin-top: -5.5em;">{{reviews.date}} &#9203;</b>
+        
+        <h4>{{reviews.content | convert_markdown | safe }}</h4>
+       
+        <div style="float: right; margin: auto;">
+            <button class="button button5">&#128681; <b class="p3">report</b></button>
+        </div>
+        <br>
+        <br>
+        <div class="line"></div>
+        
+        <!-- form -->
+
+        <form method="POST" action="" enctype="multipart/form-data" id=review>
+            <p class="p2">{{ form }}</p>
+        </form>
+        
+    {% endfor %}
+    
+</div>
 
 {% endblock %}

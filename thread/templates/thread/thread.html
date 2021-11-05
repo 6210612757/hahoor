@@ -51,26 +51,65 @@
     h1,h2,h3,h4,h5,h6 {
         font-family: 'Noto Sans Thai', sans-serif;
     }
+    .line {
+        height: 1px;
+        width: 100%;
+        background-color: #E0E0E0;
+        margin-top: 10px;
+    }
+    .button5 {
+        background-color: white;
+        color: black;
+        border: 2px solid white;
+        padding: 2px 2px;
+    }
+
+    .button5:hover {
+        background-color: #e2e2e2;
+        color: rgb(0, 0, 0);
+        border: 2px solid #e2e2e2;
+    }
 
 </style>
 
 <div style="margin-left: 25%; margin-right: 25%; margin-bottom: 7em; margin-top: 4em;">
-
+<!-- thread -->
     <h2><b class="p2">{{thread.header}}</b></h2>
     <b class="p5">by {{ thread.author.username }}</b>
-    <b class="p3" style="float: right;">{{thread.date}} &#9203;</b>
+    <b class="p3" style="float: right; margin-top: 0.3em;">{{thread.date}} &#9203;</b>
     <br>
     <br>
 
-    <b class="p4">{{thread.content | convert_markdown | safe }}</b>
-    <h3 class="p6 h3">&#128172; <b>{{thread.number_reply}} การตอบกลับ</b></h3>
-    
-    {% for sub_thread in thread.reply.all %}
-    <h5>{{sub_thread}}</h5>
-    {{sub_thread.content | convert_markdown | safe }}
+    <h3><p class="p4">{{thread.content | convert_markdown | safe }}</p></h3>
+
+    <div style="float: right; margin-top: -1.5em;">
+        <a href="#subthread"><button class="button button5"><b class="p3">&#128073; ตอบกลับกระทู้</b></button></a>
+    </div>
     <br>
-    <hr>
+    <h3 class="p6 h3">&#128172; <b>{{thread.number_reply}} การตอบกลับ</b></h3>
+<!-- sub-thread -->
+    {% for sub_thread in thread.reply.all %}
+    <b class="p3">การตอบกลับที่ 1</b>
+    <b class="p3" style="float: right; margin-top: 0.3em;">{{sub_thread.date}} &#9203;</b>
+    <br>
+    
+    <h4>{{sub_thread.content | convert_markdown | safe }}</h4>
+    
+    <br>
+    <img class="avatar" src="/static/images/avatar.png" style="width: 2em; height: 2em; margin-bottom: 0em;"> 
+    <b class="p3">ตอบกลับโดย {{sub_thread.author}} </b>
+    <div style="float: right;">
+        <button class="button button5">&#128681; <b class="p3">report</b></button>
+    </div>
+
+    <div class="line"></div>
     {% endfor %}
+
+<!-- form -->
+
+    <form method="POST" action="{% url 'thread:thread' thread.id%}" enctype="multipart/form-data" id=subthread>
+        <p class="p2">{{ form }}</p>
+    </form>
 
 <div>
 
