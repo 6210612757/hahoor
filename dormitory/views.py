@@ -56,7 +56,7 @@ def dormitory(request, dorm_title):
         
         if content.is_valid():
             content = content.cleaned_data['Content']
-            new_review = Sub_thread(reviewto= Dormitory.objects.filter(id=dormitory_id),stars=stars,content=content,author=request.user,date=datetime.datetime.now(datetime.timezone.utc))
+            new_review = Sub_thread(reviewto= Dormitory.objects.get(id=dormitory_id),stars=stars,content=content,author=request.user,date=datetime.datetime.now(datetime.timezone.utc))
             new_review.save()
             #Reset form
             content = MarkdownForm()
@@ -149,7 +149,7 @@ def review_dormitory(request, dormitory_id):
         
         if content.is_valid():
             content = content.cleaned_data['Content']
-            new_review = Sub_thread(reviewto= Dormitory.objects.filter(id=dormitory_id),stars=stars,content=content,author=request.user,date=datetime.datetime.now(datetime.timezone.utc))
+            new_review = Sub_thread(reviewto= Dormitory.objects.get(id=dormitory_id),stars=stars,content=content,author=request.user,date=datetime.datetime.now(datetime.timezone.utc))
             new_review.save()
             #Reset form
             content = MarkdownForm()

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Sub_thread(models.Model):
-    replyto = models.OneToOneField('thread.Thread', on_delete=models.CASCADE)
+    replyto = models.ForeignKey('thread.Thread', on_delete=models.CASCADE)
     content = MarkdownxField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField()

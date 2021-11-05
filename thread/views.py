@@ -35,7 +35,7 @@ def thread(request,thread_id) :
         
         if content.is_valid():
             content = content.cleaned_data['Content']
-            new_subthread = Sub_thread(replyto= Thread.objects.filter(id=thread_id),content=content,author=request.user,date=datetime.datetime.now(datetime.timezone.utc))
+            new_subthread = Sub_thread(replyto= Thread.objects.get(id=thread_id),content=content,author=request.user,date=datetime.datetime.now(datetime.timezone.utc))
             new_subthread.save()
             #Reset form
             content = MarkdownForm()
