@@ -10,4 +10,4 @@ class MarkdownForm(forms.Form):
 class DormitoryForm(forms.ModelForm):
     class Meta:
         model = Dormitory
-        fields = ['title', 'desc', 'content']
+        fields = ['title', 'desc', 'content','icon']

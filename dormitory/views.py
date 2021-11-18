@@ -179,21 +179,24 @@ def update_dormitory(request, dormitory_id):
 
     # If user submit update form
     if request.method == "POST":
-        form = DormitoryForm(request.POST)
+        form = DormitoryForm(request.POST, request.FILES)
 
         if form.is_valid():
             title = form.cleaned_data['title']
             desc = form.cleaned_data['desc']
             content = form.cleaned_data['content']
+            icon = form.cleaned_data['icon']
             # Update  This Thread
             this_dormitory.title = title
             this_dormitory.desc = desc
             this_dormitory.content = content
+            this_dormitory.icon.delete(save=True)
+            this_dormitory.icon = icon
             this_dormitory.save()
 
             return HttpResponseRedirect(reverse("dormitory:dormitory", args=(this_dormitory.title,)))
     else:
-        content = DormitoryForm(request.POST or None, instance=this_dormitory)
+        content = DormitoryForm(request.POST or None,request.FILES or None, instance=this_dormitory)
 
     return render(request, "dormitory/dormitory.html", {
         "dormitory": this_dormitory,

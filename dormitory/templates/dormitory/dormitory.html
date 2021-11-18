@@ -42,6 +42,10 @@
         margin-right: auto;
         width: 100%;
     }
+    img.scaled {
+        width: 300px;
+        height: 200px;
+    }
     .h3:before,
     .h3:after {
         background-color: rgb(211, 211, 211);
@@ -216,6 +220,10 @@ function check_star()
                 
                 <b class="p7">ชื่อหอพัก :</b>
                 <p class="p6" style="margin-top: 1em;">{{ form.title }}</p>
+                <img class="img-thumbnail scaled" style="float: right;" src="{{ dormitory.icon.url }}" >
+                <br>
+                <b class="p7">รูปภาพปก :</b>
+                <p class="p6" style="margin-top: 1em;">{{ form.icon }}</p>
                 <br>
                 <b class="p7">คำอธิบาย :</b>
                 <p class="p6" style="margin-top: 1em;">{{ form.desc }}</p>
