@@ -179,7 +179,7 @@ def update_dormitory(request, dormitory_id):
 
     # If user submit update form
     if request.method == "POST":
-        form = DormitoryForm(request.POST, request.FILES)
+        form = DormitoryForm(request.POST, request.FILES, instance=this_dormitory)
 
         if form.is_valid():
             title = form.cleaned_data['title']
@@ -190,7 +190,6 @@ def update_dormitory(request, dormitory_id):
             this_dormitory.title = title
             this_dormitory.desc = desc
             this_dormitory.content = content
-            this_dormitory.icon.delete(save=True)
             this_dormitory.icon = icon
             this_dormitory.save()
 
