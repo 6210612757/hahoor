@@ -173,7 +173,9 @@ function which_subthread()
 
     <div style="float: right; margin-top: -1.5em;" id ="#report_thread">
         <a href="#ตอบกลับกระทู้"><button class="button button5"><b class="p3">&#128073; ตอบกลับกระทู้</b></button></a>
+        {% if request.user.is_authenticated %}
         <a href="#report_thread" onclick="report_thread()"><button class="button button5">&#128681; <b class="p3">report</b></button></a>
+        {% endif %}
     </div>
     <br>
     {% endif %}
@@ -216,11 +218,14 @@ function which_subthread()
 
         <img onload="which_subthread()" class="avatar" src="/static/images/avatar.png" style="width: 2em; height: 2em; margin-bottom: 0em;"> 
         <b class="p3">ตอบกลับโดย {{sub_thread.author}} </b>
+
+        {% if request.user.is_authenticated %}
         <div style="float: right; margin-top: -0.2em;" id = "#report_sub_thread">
             <input type="hidden" value="{% url 'thread:report_subthread' thread.id sub_thread.id %}" id="sub_thread_id_{{sub_thread.id}}">
             <a href="#report_sub_thread" onclick="report_sub_thread({{sub_thread.id}})"><button class="button button5">&#128681; <b class="p3">report</b></button></a>
         </div>
-        
+        {% endif %}
+
         <div class="line"></div>
         {% endfor %}
     {% endif %}

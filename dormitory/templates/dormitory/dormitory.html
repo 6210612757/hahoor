@@ -337,11 +337,12 @@ function check_star()
                     </b>
                     
                     <h4 >{{review.content | convert_markdown | safe }}</h4>
-                
+                    {% if request.user.is_authenticated %}
                     <div style="float: right; margin-top: -2em; " id = "#report_review">
                         <input type="hidden" value="{% url 'dormitory:report_review' review.id %}" id="review_url_{{review.id}}">
                         <a href="#report_review" onclick="report_review({{review.id}})" class="button button5" role="button" aria-pressed="true">&#128681; <b class="p3">report</b></a>
                     </div>
+                    {% endif %}
                     <br>
 
                     <div class="line"></div>
