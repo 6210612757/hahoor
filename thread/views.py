@@ -26,7 +26,7 @@ def index(request):
         for n in Thread.objects.all():
             if n.report < 20:
                 thread_list.append(n)
-    return render(request, "thread/index.html", {"thread_list": thread_list[::-1], "check_search": check_search, "title": search})
+    return render(request, "thread/index.html", {"thread_list": thread_list, "check_search": check_search, "title": search})
 
 
 def thread(request, thread_id):
