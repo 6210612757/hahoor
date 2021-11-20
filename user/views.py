@@ -43,7 +43,7 @@ def login_check(request):
             messages.warning(request, "Invalid credential")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-    return render(request, "dormitory/index.html")
+    return HttpResponseRedirect(reverse("dormitory:index"))
 
 
 def register(request):
@@ -78,7 +78,7 @@ def register(request):
                         first_name=first_name, last_name=last_name)
         add_user.set_password(password)
         add_user.save()
-        return render(request, "dormitory/index.html")
+        return HttpResponseRedirect(reverse("dormitory:index"))
     return render(request, "user/register.html")
 
 
